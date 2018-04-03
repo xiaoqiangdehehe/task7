@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--荣联-->
+    <bean id="ccpRestSDKUtil" class="com.wyq.taskSeven.util.CCPRestSDKUtil">
+        <constructor-arg type="java.lang.String" name="serverIP" value="app.cloopen.com"/>
+        <constructor-arg type="java.lang.String" name="serverPort" value="8883"/>
+        <constructor-arg type="java.lang.String" name="accountSid" value=""/>
+        <constructor-arg type="java.lang.String" name="accountToken" value=""/>
+        <constructor-arg type="java.lang.String" name="appId" value=""/>
+    </bean>
+
+    <!--Sendcloud-->
+    <bean id="sendCloudConfig" class="com.sendcloud.sdk.config.Config" lazy-init="false">
+        <property name="send_api" value="http://api.sendcloud.net/apiv2/mail/send"/>
+        <property name="send_template_api" value="http://api.sendcloud.net/apiv2/mail/sendtemplate"/>
+        <property name="send_sms_api" value="http://www.sendcloud.net/smsapi/send"/>
+        <property name="send_voice_api" value="http://www.sendcloud.net/smsapi/sendVoice"/>
+        <property name="api_user" value=""/>
+        <property name="api_key" value=""/>
+        <property name="sms_user" value=""/>
+        <property name="sms_key" value=""/>
+    </bean>
+
+    <!--MailBody-->
+    <bean id="mailBody" class="com.sendcloud.sdk.model.MailBody">
+        <!--发件人地址-->
+        <property name="from" value="wuyiqiang@jnshu.com"/>
+        <!--发件人名称. 显示如: ifaxin客服支持<support@ifaxin.com>-->
+        <property name="fromName" value="任务七"/>
+        <!--设置用户默认的回复邮件地址.多个地址使用';'分隔，地址个数不能超过3个. 如果 replyTo 没有或者为空, 则默认的回复邮件地址为 from-->
+        <property name="replyTo" value="reply@sendcloud.org"/>
+        <!--标题. 不能为空-->
+        <property name="subject" value="来自 哈哈007 的邮件"/>
+    </bean>
+
+    <!--aliyum-oss-->
+    <bean id="ossClient" class="com.aliyun.oss.OSSClient" lazy-init="false" destroy-method="shutdown">
+        <constructor-arg name="endpoint" type="java.lang.String" value="oss-cn-beijing.aliyuncs.com"/>
+        <constructor-arg name="accessKeyId" type="java.lang.String" value=""/>
+        <constructor-arg name="secretAccessKey" type="java.lang.String" value=""/>
+    </bean>
+
+    <bean id="aliyumOSSUtil" class="com.wyq.taskSeven.util.AliyumOSSUtil">
+        <property name="ossClient" ref="ossClient"/>
+        <property name="bucketName" value="taskseven"/>
+    </bean>
+</beans>

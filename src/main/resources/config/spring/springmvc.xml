@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--自己主动扫描控制器-->
+    <context:component-scan base-package="com.wyq.taskSeven.controller"/>
+    <!--视图渲染-->
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--静态资源映射-->
+    <!--<mvc:default-servlet-handler/>-->
+    <!--本项目把静态资源放在了WEB-INF的statics目录下，资源映射如下-->
+    <mvc:resources mapping="/css/**" location="/WEB-INF/statics/css/"/>
+    <mvc:resources mapping="/js/**" location="/WEB-INF/statics/js/"/>
+    <mvc:resources mapping="/image/**" location="/WEB-INF/statics/image/"/>
+
+    <!--控制器映射器和控制器适配器-->
+    <mvc:annotation-driven></mvc:annotation-driven>
+
+    <bean id="tilesViewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver" p:order="1"/>
+    <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>/WEB-INF/tiles/layout.xml</value>
+            </list>
+        </property>
+    </bean>
+    <!-- SpringMVC上传文件时，需要配置MultipartResolver处理器 -->
+    <!--defaultEncoding配置请求的编码格式，默认为iso-8859-1-->
+    <!--maxUploadSize配置文件的最大单位，单位为字节-->
+    <!--maxInMemorySize配置上传文件的缓存 ，单位为字节-->
+    <!--resolveLazily属性启用是为了推迟文件解析，以便在UploadAction 中捕获文件大小异常-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 指定所上传文件的总大小不能超过20971500KB。注意maxUploadSize属性的限制不是针对单个文件，而是所有文件的容量之和 -->
+        <!-- 设置在文件上传时允许写到内存中的最大值，以字节为单位计算，默认是10240 -->
+        <property name="maxUploadSize" value="2097150000"/>
+        <!-- 但是经实验，上传文件大小若小于此参数，则不会生成临时文件 -->
+        <property name="maxInMemorySize" value="0" />
+        <!--<property name="defaultEncoding" value="UTF-8"/>-->
+        <!--<property name="resolveLazily" value="true"/>-->
+    </bean>
+
+    <!--<mvc:interceptors>-->
+    <!--&lt;!&ndash;拦截所有请求&ndash;&gt;-->
+    <!--&lt;!&ndash;<bean class="org.wyq.task.interceptor.ProfessionInterceptor"/>&ndash;&gt;-->
+    <!--<mvc:interceptor>-->
+    <!--<mvc:mapping path="/school/u/profession"/>-->
+    <!--<bean class="org.wyq.task.interceptor.ProfessionInterceptor"/>-->
+    <!--</mvc:interceptor>-->
+    <!--</mvc:interceptors>-->
+
+</beans>
